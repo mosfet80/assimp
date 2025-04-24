@@ -1091,11 +1091,6 @@ IF (ASSIMP_BUILD_USD_IMPORTER)
 
     set(Tinyusdz_DEP_SOURCES
             ${Tinyusdz_SRC_ABSPATH}/external/fpng.cpp
-            #${Tinyusdz_SRC_ABSPATH}/external/staticstruct.cc
-            #${Tinyusdz_SRC_ABSPATH}/external/string_id/database.cpp
-            #${Tinyusdz_SRC_ABSPATH}/external/string_id/error.cpp
-            #${Tinyusdz_SRC_ABSPATH}/external/string_id/string_id.cpp
-            #${Tinyusdz_SRC_ABSPATH}/external/tinyxml2/tinyxml2.cpp
             ${Tinyusdz_SRC_ABSPATH}/integerCoding.cpp
             ${Tinyusdz_SRC_ABSPATH}/lz4-compression.cc
             ${Tinyusdz_SRC_ABSPATH}/lz4/lz4.c
@@ -1137,22 +1132,13 @@ ELSE()
 ENDIF()
 
 # polyclipping
-#IF(ASSIMP_HUNTER_ENABLED)
-#  hunter_add_package(polyclipping)
-#  find_package(polyclipping CONFIG REQUIRED)
-#ELSE()
   SET( Clipper_SRCS
     ../contrib/clipper/clipper.hpp
     ../contrib/clipper/clipper.cpp
   )
   SOURCE_GROUP( Contrib\\Clipper FILES ${Clipper_SRCS})
-#ENDIF()
 
 # poly2tri
-#IF(ASSIMP_HUNTER_ENABLED)
-#  hunter_add_package(poly2tri)
-#  find_package(poly2tri CONFIG REQUIRED)
-#ELSE()
   SET( Poly2Tri_SRCS
     ../contrib/poly2tri/poly2tri/common/shapes.cc
     ../contrib/poly2tri/poly2tri/common/shapes.h
@@ -1167,7 +1153,6 @@ ENDIF()
     ../contrib/poly2tri/poly2tri/sweep/sweep_context.h
   )
   SOURCE_GROUP( Contrib\\Poly2Tri FILES ${Poly2Tri_SRCS})
-#ENDIF()
 
 # minizip/unzip
 IF(ASSIMP_HUNTER_ENABLED)
@@ -1197,12 +1182,7 @@ IF(3MF IN_LIST ASSIMP_EXPORTERS_LIST)
       ../contrib/zip/src/zip.h
     )
 
-    # TODO if cmake required version has been updated to >3.12.0, collapse this to the second case only
-    if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
-      add_definitions(-DMINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
-    else()
-      add_compile_definitions(MINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
-    endif()
+    add_compile_definitions(MINIZ_USE_UNALIGNED_LOADS_AND_STORES=0)
 
     SOURCE_GROUP( ziplib FILES ${ziplib_SRCS} )
   ENDIF()
@@ -1601,12 +1581,7 @@ ENDIF()
 IF(NOT ASSIMP_HUNTER_ENABLED)
   if (UNZIP_FOUND)
     INCLUDE_DIRECTORIES(${UNZIP_INCLUDE_DIRS})
-    # TODO if cmake required version has been updated to >3.12.0, collapse this to the second case only
-    if(${CMAKE_VERSION} VERSION_LESS "3.12.0")
-      TARGET_LINK_LIBRARIES(assimp ${UNZIP_LIBRARIES})
-    else()
-      TARGET_LINK_LIBRARIES(assimp ${UNZIP_LINK_LIBRARIES})
-    endif()
+    TARGET_LINK_LIBRARIES(assimp ${UNZIP_LINK_LIBRARIES})
   else ()
     INCLUDE_DIRECTORIES("../")
   endif ()
